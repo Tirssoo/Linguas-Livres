@@ -1,0 +1,37 @@
+# Ambiente virtual (ajuste o nome se for diferente)
+venv/
+env/
+
+# Arquivos temporários do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Arquivos de banco de dados
+*.sqlite3
+
+# Arquivos de log
+*.log
+
+# Diretórios do Django coletados com collectstatic
+staticfiles/
+static_root/
+
+# Configurações e metadados do editor
+.vscode/
+.idea/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de teste e cobertura (se usar pytest ou coverage)
+htmlcov/
+.coverage
+.tox/
+.cache/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
