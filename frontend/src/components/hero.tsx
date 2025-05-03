@@ -8,15 +8,16 @@ export function Hero() {
       <ButtonEnvio />
       <Link
         href="https://www.google.com"
-        text="Google"
         className="text-purple-500 hover:text-purple-700"
-      />
+      >
+        Google
+      </Link>
       <Link
         href="https://www.facebook.com"
-        text="Facebook"
         className="text-blue-500 hover:text-blue-700"
-      />
-      
+      >
+        Facebook
+      </Link>
     </section>
   );
 }

@@ -1,20 +1,21 @@
 import { cn } from "@/lib/utils";
+import { NavLink } from "react-router";
 
 export function Link({
   className,
   href,
-  text,
+  children,
 }: {
   className?: string;
   href: string;
-  text: string;
-}) { 
+  children: React.ReactNode;
+}) {
   return (
-    <a
-      href={href}
+    <NavLink
+      to={href}
       className={cn("text-red-500 hover:text-red-700 font-semibold", className)}
     >
-      {text}
-    </a>
+      {children}
+    </NavLink>
   );
 }
