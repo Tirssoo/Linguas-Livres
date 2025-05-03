@@ -10,7 +10,7 @@ import { Nav } from "./nav";
 export function Header() {
   return (
     <header className="flex items-center gap-4 px-4 py-2 bg-muted">
-      <Link href="/">
+      <Link href="/" external>
         <Logo />
       </Link>
       <div className="flex items-center gap-4 text-[#F24242]">

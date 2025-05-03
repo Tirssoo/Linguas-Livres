@@ -1,9 +1,9 @@
-import { Header } from "@/components/header";
-import { Outlet } from "react-router";
+import { Header } from '@/components/header';
+import { Outlet } from 'react-router';
 
 function App() {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="font-display flex h-screen flex-col scroll-smooth antialiased">
       <Header />
       <Outlet />
     </div>
