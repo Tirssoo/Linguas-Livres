@@ -4,13 +4,14 @@
  */
 
 import { Link } from "./link";
+import { routes } from "@/lib/routes";
 
 export function Nav() {
   return (
-    <nav className="flex items-center justify-center gap-2">
-      <Link href="/">Home</Link>
-      <Link href="/about">About</Link>
-      <Link href="/contact">Contact</Link>
+    <nav className="flex items-center justify-center gap-10 pl-10">
+      {routes.map((route) => (
+        <Link href={route.href}>{route.label}</Link>
+      ))}
     </nav>
   );
 }

@@ -4,17 +4,18 @@
  */
 
 import { Link } from "./link";
+import { Logo } from "./logo";
 import { Nav } from "./nav";
-
-import logo from "@/assets/logo.png";
 
 export function Header() {
   return (
-    <header className="flex items-center justify-between">
+    <header className="flex items-center gap-4 px-4 py-2 bg-muted">
       <Link href="/">
-        <img src={logo} alt="Linguas Livres" className="w-10 h-10" />
+        <Logo />
       </Link>
-      <Nav />
+      <div className="flex items-center gap-4 text-[#F24242]">
+        <Nav />
+      </div>
     </header>
   );
 }

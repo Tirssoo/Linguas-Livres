@@ -13,7 +13,10 @@ export function Link({
   return (
     <NavLink
       to={href}
-      className={cn("text-red-500 hover:text-red-700 font-semibold", className)}
+      className={cn(
+        "text-primary hover:text-primary/80 font-semibold",
+        className
+      )}
     >
       {children}
     </NavLink>
