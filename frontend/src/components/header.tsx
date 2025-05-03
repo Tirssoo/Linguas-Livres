@@ -3,10 +3,19 @@
  * Header onde ficara o logo e o menu de navegação.
  */
 
+import { Link } from "./link";
+import { Logo } from "./logo";
+import { Nav } from "./nav";
+
 export function Header() {
   return (
-    <header>
-      <h1>Header</h1>
+    <header className="flex items-center gap-4 px-4 py-2 bg-muted">
+      <Link href="/" external>
+        <Logo className="size-25" />
+      </Link>
+      <div className="flex items-center gap-4 text-[#F24242]">
+        <Nav />
+      </div>
     </header>
   );
 }
