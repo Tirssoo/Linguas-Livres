@@ -1,45 +1,89 @@
-import { translateFile } from "@/lib/api";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
-type DropzoneProps = {
-  fileSizeLimit?: number;
-};
+export function Dropzone({
+  children,
+  acceptedFileTypes,
+  dropText,
+  setCurrentFile,
+}: {
+  children: React.ReactNode;
+  acceptedFileTypes: string[];
+  dropText: string;
+  setCurrentFile: (file: File) => void;
+}) {
+  const [isDragging, setIsDragging] = useState(false);
+  const dragCounter = useRef(0);
 
-export function Dropzone({ fileSizeLimit = 10 }: DropzoneProps) {
-  const [file, setFile] = useState<File | null>(null);
+  const handleDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && file.size > fileSizeLimit * 1024 * 1024) {
-      alert(`O arquivo deve ter menos de ${fileSizeLimit}MB`);
-      return;
-    }
-  };
+  const handleDragIn = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current++;
 
-  const handleTranslation = async () => {
-    if (!file) return;
-    const { data, error } = await translateFile(file);
-    if (error) {
-      console.error(error);
-    }
-    setFile(null);
-    console.log(data);
-  };
+    if (e.dataTransfer?.items && e.dataTransfer.items.length > 0)
+      setIsDragging(true);
+  }, []);
 
+  const handleDragOut = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current--;
+
+    if (dragCounter.current === 0) setIsDragging(false);
+  }, []);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
+      dragCounter.current = 0;
+
+      const files = e.dataTransfer?.files;
+      if (files && files.length > 0) {
+        const droppedFile = files[0];
+
+        if (!droppedFile) {
+          alert("How did you do a drop with no files???");
+          throw new Error("No files dropped.");
+        }
+
+        if (
+          !acceptedFileTypes.includes(droppedFile.type) &&
+          !acceptedFileTypes.some((type) =>
+            droppedFile.name.toLowerCase().endsWith(type.replace("*", "")),
+          )
+        ) {
+          alert("Tipo de arquivo não suportado.");
+          throw new Error("Invalid file type.");
+        }
+
+        setCurrentFile(droppedFile);
+      }
+    },
+    [acceptedFileTypes, setCurrentFile],
+  );
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <div className="border-border flex items-center justify-center rounded-lg border-2 border-dashed p-4">
-        <p className="text-muted-foreground text-sm">
-          Arraste e solte o documento aqui
-        </p>
-        <input type="file" className="hidden" onChange={handleFileChange} />
-      </div>
-      <button
-        className="bg-active text-primary hover:bg-active/80 w-full rounded-lg px-4 py-2 font-semibold uppercase"
-        onClick={handleTranslation}
-      >
-        Converter
-      </button>
+    <div
+      onDragEnter={handleDragIn}
+      onDragLeave={handleDragOut}
+      onDragOver={handleDrag}
+      onDrop={handleDrop}
+      className="h-full w-full"
+    >
+      {isDragging && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="bg-primary/50 absolute inset-0 backdrop-blur-sm" />
+          <div className="animate-in fade-in zoom-in border-primary relative flex h-[90%] w-[90%] transform items-center justify-center rounded-xl border-2 border-dashed transition-all duration-200 ease-out">
+            <p className="text-primary text-2xl font-semibold">{dropText}</p>
+          </div>
+        </div>
+      )}
+      {children}
     </div>
   );
 }
