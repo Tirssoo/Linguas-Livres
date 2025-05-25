@@ -4,6 +4,7 @@
  * Google Maps apresentando as localizações dos locais que emitem documentos.
  */
 
+import MapComponent from "@/components/google-maps";
 import { getMaps } from "@/lib/api";
 import { useEffect, useState } from "react";
 
@@ -74,7 +75,7 @@ export default function LinguasLivres() {
         <div className="mb-6 h-80 rounded-md bg-gray-300 lg:mb-0 lg:w-1/2">
           {/* Placeholder para o mapa */}
           <div className="flex h-full w-full items-center justify-center bg-gray-200 text-gray-500">
-            Mapa (Google Maps aqui)
+            <MapComponent></MapComponent>
           </div>
         </div>
 
