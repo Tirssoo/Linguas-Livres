@@ -5,7 +5,7 @@
  */
 
 import MapComponent from "@/components/google-maps";
-import { getMaps } from "@/lib/api";
+//import { getMaps } from "@/lib/api"; 
 import { useEffect, useState } from "react";
 
 const documentTips: { [key: string]: string } = {
@@ -35,19 +35,7 @@ export default function LinguasLivres() {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [maps, setMaps] = useState<unknown>();
 
-  useEffect(() => {
-    const fetchMaps = async () => {
-      const { data, error } = await getMaps();
-      if (error) {
-        console.error(error);
-      } else {
-        setMaps(data!);
-      }
-    };
-
-    fetchMaps();
-  }, []);
-
+ 
   console.log(maps);
 
   const openModal = (type: string) => setActiveModal(type);
