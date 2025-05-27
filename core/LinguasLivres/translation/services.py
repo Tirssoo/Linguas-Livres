@@ -7,7 +7,7 @@ client = translate.Client()
 def translate_text(text, target_language="en"):
     result = client.translate(text, target_language=target_language)
     return result["translatedText"]
-s
+
 DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
 
 def traduzir_texto(texto, idioma_destino="EN"):

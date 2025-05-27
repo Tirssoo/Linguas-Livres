@@ -12,7 +12,7 @@ def traduzir_view(request):
     if request.method == "POST" and request.FILES.get("arquivo"):
         uploaded_file = request.FILES["arquivo"]
         caminho = default_storage.save(f"uploads/{uploaded_file.name}", uploaded_file)
-        caminho_traduzido = processar_e_traduzir_txt(caminho)
+        caminho_traduzido = "processar_e_traduzir_txt"(caminho)
         return FileResponse(open(caminho_traduzido, "rb"), as_attachment=True)
     
     return render(request, "upload.html")
