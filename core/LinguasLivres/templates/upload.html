@@ -1,0 +1,5 @@
+<form action="/traduzir/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="arquivo" required>
+    <button type="submit">Traduzir</button>
+</form>
