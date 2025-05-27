@@ -3,7 +3,6 @@ django-cors-headers
 djangorestframework
 python-dotenv
 requests
-python-dotenv
-
-
-
+google-cloud-translate
+PyMuPDF
+python-docx

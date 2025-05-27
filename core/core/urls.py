@@ -7,4 +7,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path("traduzir/", traduzir_view),
+    path('traduzir/', views.traduzir_documento),
 ]
