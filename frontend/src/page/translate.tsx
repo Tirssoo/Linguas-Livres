@@ -4,9 +4,10 @@
  */
 
 import { Dropzone } from "@/components/dropzone";
+import { Textarea } from "@/components/ui/textarea";
 import { UploadBox } from "@/components/upload-box";
 import { useFileUploader } from "@/hooks/use-file-uploader";
-import { translateFile } from "@/lib/api";
+import { api } from "@/lib/api";
 import { formatFileSize } from "@/lib/utils";
 import { FileTextIcon } from "lucide-react";
 import { useState } from "react";
@@ -15,15 +16,17 @@ export default function TranslatePage() {
   const fileUploaderProps = useFileUploader();
 
   const [file, setFile] = useState<File | null>(null);
+  const [translatedText, setTranslatedText] = useState<string | null>(null);
 
   const handleTranslation = async () => {
     if (!file) return;
-    const { data, error } = await translateFile(file);
+    const { data, error } = await api.translate(file);
     if (error) {
       console.error(error);
     }
     setFile(null);
-    console.log(data);
+    const { traduzido } = await data?.json();
+    setTranslatedText(traduzido);
   };
 
   const uploadBox = (
@@ -31,7 +34,7 @@ export default function TranslatePage() {
       title="Insira o documento"
       subtitle="Documentos suportados: PDF, DOCX, DOC, TXT"
       description="Clique para selecionar"
-      accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, text/plain"
       onChange={fileUploaderProps.handleFileChangeEvent}
     />
   );
@@ -48,6 +51,7 @@ export default function TranslatePage() {
               "application/pdf",
               "application/msword",
               "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "text/plain",
             ]}
             dropText="Arraste e solte o documento aqui"
             setCurrentFile={setFile}
@@ -60,6 +64,7 @@ export default function TranslatePage() {
               "application/pdf",
               "application/msword",
               "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "text/plain",
             ]}
             dropText="Arraste e solte o documento aqui"
             setCurrentFile={setFile}
@@ -97,6 +102,7 @@ export default function TranslatePage() {
         )}
         {file && (
           <button
+            type="button"
             className="bg-active text-primary hover:bg-active/80 w-full rounded-lg px-4 py-2 font-semibold uppercase"
             onClick={handleTranslation}
           >
@@ -104,6 +110,17 @@ export default function TranslatePage() {
           </button>
         )}
       </div>
+      {translatedText && (
+        <div className="flex flex-col items-center justify-center gap-4">
+          <h1 className="text-primary bg-active rounded-sm px-4 py-1 text-4xl font-bold">
+            Resultado
+          </h1>
+          <Textarea
+            className="text-muted-foreground w-full text-lg font-medium"
+            defaultValue={translatedText}
+          />
+        </div>
+      )}
     </main>
   );
 }

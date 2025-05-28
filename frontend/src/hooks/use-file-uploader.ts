@@ -47,6 +47,7 @@ export function useFileUploader() {
     isProcessing,
     handleFileChange: processFile,
     handleFileChangeEvent,
+    handleFilePaste,
     cancel,
   };
 }

@@ -1,12 +1,5 @@
-from google.cloud import translate_v2 as translate
 import os
 import requests
-
-client = translate.Client()
-
-def translate_text(text, target_language="en"):
-    result = client.translate(text, target_language=target_language)
-    return result["translatedText"]
 
 DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
 
