@@ -1,14 +1,17 @@
+import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Outlet } from "react-router";
-import { Footer } from "./components/footer";
 
 function App() {
   return (
-    <div className="font-display flex h-screen flex-col scroll-smooth antialiased">
-      <Header />
-      <Outlet />
-      <Footer />
-    </div>
+    <TooltipProvider>
+      <div className="font-display flex h-screen flex-col scroll-smooth antialiased">
+        <Header />
+        <Outlet />
+        <Footer />
+      </div>
+    </TooltipProvider>
   );
 }
 
