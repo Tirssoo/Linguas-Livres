@@ -4,24 +4,30 @@
  */
 
 import { Dropzone } from "@/components/dropzone";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { UploadBox } from "@/components/upload-box";
 import { useFileUploader } from "@/hooks/use-file-uploader";
 import { api } from "@/lib/api";
 import { formatFileSize } from "@/lib/utils";
 import { FileTextIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function TranslatePage() {
   const fileUploaderProps = useFileUploader();
   const [file, setFile] = useState<File | null>(null);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
-
-  useEffect(() => {}, []);
+  const [language, setLanguage] = useState<string>("");
 
   const handleTranslation = async () => {
     if (!file) return;
-    const { data, error } = await api.translate(file);
+    const { data, error } = await api.translate(file, language);
     if (error) {
       console.error(error);
     } else if (data) {
@@ -122,13 +128,28 @@ export default function TranslatePage() {
           </Dropzone>
         )}
         {file && (
-          <button
-            type="button"
-            className="bg-active text-primary hover:bg-active/80 w-full rounded-lg px-4 py-2 font-semibold uppercase"
-            onClick={handleTranslation}
-          >
-            Traduzir
-          </button>
+          <div className="flex w-full flex-col items-center justify-center gap-4">
+            <Select value={language} onValueChange={setLanguage}>
+              <SelectTrigger className="focus-visible:ring-primary w-full">
+                <SelectValue placeholder="Traduzir para" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="pt">Português</SelectItem>
+                <SelectItem value="en">Inglês</SelectItem>
+                <SelectItem value="es">Espanhol</SelectItem>
+                <SelectItem value="fr">Francês</SelectItem>
+                <SelectItem value="de">Alemão</SelectItem>
+                <SelectItem value="it">Italiano</SelectItem>
+              </SelectContent>
+            </Select>
+            <button
+              type="button"
+              className="bg-active text-primary hover:bg-active/80 w-full rounded-lg px-4 py-2 font-semibold uppercase"
+              onClick={handleTranslation}
+            >
+              Traduzir
+            </button>
+          </div>
         )}
       </div>
       {translatedText && (

@@ -3,11 +3,12 @@ import { tryCatch } from "./try-catch";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export const api = {
-  translate: async (file?: File, text?: string) => {
-    if (file) {
+  translate: async (file?: string | File, language?: string) => {
+    if (file && file instanceof File) {
       const filename = file.name.replace(" ", "_");
       const formData = new FormData();
       formData.append("arquivo", file, filename);
+      formData.append("lingua", language ?? "en");
 
       const { data, error } = await tryCatch(
         fetch(`${apiUrl}/traduzir/`, {
@@ -19,11 +20,11 @@ export const api = {
       return { data, error };
     }
 
-    if (text) {
+    if (file && typeof file === "string") {
       const { data, error } = await tryCatch(
         fetch(`${apiUrl}/traduzir/`, {
           method: "POST",
-          body: JSON.stringify({ texto: text }),
+          body: JSON.stringify({ texto: file, lingua: language ?? "en" }),
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",

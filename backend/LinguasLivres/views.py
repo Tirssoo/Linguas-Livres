@@ -9,19 +9,20 @@ import os
 @csrf_exempt
 def traduzir_view(request, *args, **kwargs):
     if request.method == "POST" and request.FILES.get("arquivo"):
+        lingua = request.POST.get("lingua")
         arquivo = request.FILES["arquivo"]
         nome_arquivo = arquivo.name.lower()
         if nome_arquivo.endswith(".txt"):
             texto = extract_text_from_txt(arquivo)
-            traduzido = traduzir_texto(texto)
+            traduzido = traduzir_texto(texto, lingua)
             return JsonResponse({"traduzido": traduzido})
         elif nome_arquivo.endswith(".pdf"):
             texto = extract_text_from_pdf(arquivo)
-            traduzido = traduzir_texto(texto)
+            traduzido = traduzir_texto(texto, lingua)
             return JsonResponse({"traduzido": traduzido})
         elif nome_arquivo.endswith(".docx"):
             texto = extract_text_from_docx(arquivo)
-            traduzido = traduzir_texto(texto)
+            traduzido = traduzir_texto(texto, lingua)
             return JsonResponse({"traduzido": traduzido})
         else:
             return JsonResponse({"erro": "Tipo de arquivo não suportado. Apenas .txt e .pdf são aceitos."}, status=400)
