@@ -4,6 +4,7 @@
  */
 
 import { Dropzone } from "@/components/dropzone";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { UploadBox } from "@/components/upload-box";
 import { useFileUploader } from "@/hooks/use-file-uploader";
@@ -40,7 +41,7 @@ export default function TranslatePage() {
   );
 
   return (
-    <main className="flex h-screen flex-col items-center justify-center gap-4">
+    <main className="flex h-full flex-1 flex-col items-center justify-center gap-4">
       <h1 className="text-primary bg-active rounded-sm px-4 py-1 text-4xl font-bold">
         Insira o documento
       </h1>
@@ -115,10 +116,12 @@ export default function TranslatePage() {
           <h1 className="text-primary bg-active rounded-sm px-4 py-1 text-4xl font-bold">
             Resultado
           </h1>
-          <Textarea
-            className="text-muted-foreground w-full text-lg font-medium"
-            defaultValue={translatedText}
-          />
+          <ScrollArea className="h-[calc(100vh-20rem)] w-full">
+            <Textarea
+              className="text-muted-foreground w-full text-lg font-medium"
+              defaultValue={translatedText}
+            />
+          </ScrollArea>
         </div>
       )}
     </main>
