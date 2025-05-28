@@ -4,30 +4,50 @@
  */
 
 import { Dropzone } from "@/components/dropzone";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { UploadBox } from "@/components/upload-box";
 import { useFileUploader } from "@/hooks/use-file-uploader";
 import { api } from "@/lib/api";
 import { formatFileSize } from "@/lib/utils";
 import { FileTextIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function TranslatePage() {
   const fileUploaderProps = useFileUploader();
-
   const [file, setFile] = useState<File | null>(null);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
+
+  useEffect(() => {}, []);
 
   const handleTranslation = async () => {
     if (!file) return;
     const { data, error } = await api.translate(file);
     if (error) {
       console.error(error);
+    } else if (data) {
+      // Processa o resultado da tradução somente se não houver erro e se houver dados
+      try {
+        const result = await data.json();
+        // Verifica se a resposta tem a estrutura { traduzido: string }
+        // e se traduzido é uma string antes de definir o estado
+        if (typeof result?.traduzido === "string") {
+          setTranslatedText(result.traduzido);
+        } else {
+          // Trata a estrutura de resposta inesperada
+          console.error("Estrutura de resposta inesperada:", result);
+          setTranslatedText("Erro: Resposta inesperada do servidor.");
+        }
+      } catch (jsonError) {
+        console.error("Erro ao processar a resposta do servidor:", jsonError);
+        setTranslatedText("Erro: Falha ao processar a resposta do servidor.");
+      }
+    } else {
+      // Trata o caso onde não há erro, mas também não há dados
+      console.error("Falha na tradução: Nenhuma resposta recebida.");
+      setTranslatedText("Erro: Nenhuma resposta recebida do servidor.");
     }
+    // Define o arquivo como null independentemente de sucesso ou falha
     setFile(null);
-    const { traduzido } = await data?.json();
-    setTranslatedText(traduzido);
   };
 
   const uploadBox = (
@@ -41,7 +61,7 @@ export default function TranslatePage() {
   );
 
   return (
-    <main className="flex h-full flex-1 flex-col items-center justify-center gap-4">
+    <main className="flex flex-1 flex-col items-center justify-center gap-4 py-2">
       <h1 className="text-primary bg-active rounded-sm px-4 py-1 text-4xl font-bold">
         Insira o documento
       </h1>
@@ -112,16 +132,14 @@ export default function TranslatePage() {
         )}
       </div>
       {translatedText && (
-        <div className="flex flex-col items-center justify-center gap-4">
+        <div className="container mx-auto flex flex-col items-center justify-center gap-4">
           <h1 className="text-primary bg-active rounded-sm px-4 py-1 text-4xl font-bold">
             Resultado
           </h1>
-          <ScrollArea className="h-[calc(100vh-20rem)] w-full">
-            <Textarea
-              className="text-muted-foreground w-full text-lg font-medium"
-              defaultValue={translatedText}
-            />
-          </ScrollArea>
+          <Textarea
+            className="text-muted-foreground focus-visible:ring-primary h-[400px] w-full text-lg font-medium"
+            defaultValue={translatedText}
+          />
         </div>
       )}
     </main>

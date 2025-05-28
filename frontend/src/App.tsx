@@ -6,7 +6,7 @@ import { Outlet } from "react-router";
 function App() {
   return (
     <TooltipProvider>
-      <div className="font-display flex h-screen flex-col scroll-smooth antialiased">
+      <div className="font-display flex h-dvh flex-col scroll-smooth antialiased">
         <Header />
         <Outlet />
         <Footer />
